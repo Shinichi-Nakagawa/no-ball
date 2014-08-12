@@ -12,10 +12,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.vm.network "public_network"
   # config.ssh.forward_agent = true
 
-  # config.vm.provision :chef_solo do |chef|
-    # chef.cookbooks_path = ["./chef-solo/cookbooks", "./chef-solo/site-cookbooks"]
-    # chef.add_recipe "wbm"
-    # chef.add_recipe "wbm_database"
-    # chef.add_recipe "db_migrate"
-  # end
+  config.vm.provision :chef_solo do |chef|
+    chef.cookbooks_path = ["./chef-solo/cookbooks", "./chef-solo/site-cookbooks"]
+    chef.add_recipe "apt"
+    chef.add_recipe "db"
+  end
 end
