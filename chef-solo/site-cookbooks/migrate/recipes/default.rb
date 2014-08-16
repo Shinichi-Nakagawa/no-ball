@@ -25,6 +25,7 @@ mysql_database_user node['database']['user']['admin']['name'] do
   password node['database']['user']['admin']['password']
   database_name node['database']['name']
   privileges [:all]
+  host '%'  # TODO 開発用。本番ではHOSTを絞ろう
   action [:create, :grant]
 end
 
@@ -35,5 +36,6 @@ mysql_database_user node['database']['user']['app']['name'] do
   password node['database']['user']['app']['password']
   database_name node['database']['name']
   privileges [:select, :update, :insert, :delete]
+  host '%'  # TODO 開発用。本番ではHOSTを絞ろう
   action [:create, :grant]
 end
