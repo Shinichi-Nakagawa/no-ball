@@ -19,13 +19,13 @@ mysql_database node['database']['name'] do
   action :create
 end
 
+
 # create & grant admin username
 mysql_database_user node['database']['user']['admin']['name'] do
   connection mysql_connection_info
   password node['database']['user']['admin']['password']
   database_name node['database']['name']
   privileges [:all]
-  host '%'  # TODO 開発用。本番ではHOSTを絞ろう
   action [:create, :grant]
 end
 
@@ -39,3 +39,17 @@ mysql_database_user node['database']['user']['app']['name'] do
   host '%'  # TODO 開発用。本番ではHOSTを絞ろう
   action [:create, :grant]
 end
+
+
+# copy sql file
+cookbook_file node['database']['sean_lahman']['sql'] do
+  path "/tmp/#{node['database']['sean_lahman']['sql']}"
+  action :create_if_missing
+end
+
+
+# execute sql
+execute node['database']['sean_lahman']['sql'] do
+  command "mysql -u#{node['database']['user']['admin']['name']} -D#{node['database']['name']} -p#{node['database']['user']['admin']['password']} < /tmp/#{node['database']['sean_lahman']['sql']}"
+end
+
