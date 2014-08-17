@@ -53,3 +53,9 @@ execute node['database']['sean_lahman']['sql'] do
   command "mysql -u#{node['database']['user']['admin']['name']} -D#{node['database']['name']} -p#{node['database']['user']['admin']['password']} < /tmp/#{node['database']['sean_lahman']['sql']}"
 end
 
+
+# generate SQLAlchemy model code
+execute node['database']['sean_lahman']['python'] do
+  command "sqlacodegen mysql://#{node['database']['user']['admin']['name']}:#{node['database']['user']['admin']['password']}@localhost:#{node['mysql']['port']}/#{node['database']['name']} --outfile /vagrant/#{node['database']['sean_lahman']['python']}"
+end
+

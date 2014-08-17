@@ -17,6 +17,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.add_recipe "apt"
     chef.add_recipe "package_install"
     chef.add_recipe "db"
+    chef.add_recipe "python_package"
     chef.add_recipe "migrate"
   end
 end
