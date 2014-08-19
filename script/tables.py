@@ -49,7 +49,7 @@ class Appearance(Base):
 class AwardsManager(Base):
     __tablename__ = u'AwardsManagers'
 
-    managerID = Column(String(10), primary_key=True, nullable=False)
+    playerID = Column(String(9), primary_key=True, nullable=False)
     awardID = Column(String(25), primary_key=True, nullable=False)
     yearID = Column(Integer, primary_key=True, nullable=False)
     lgID = Column(String(2), primary_key=True, nullable=False)
@@ -74,7 +74,7 @@ class AwardsShareManager(Base):
     awardID = Column(String(25), primary_key=True, nullable=False)
     yearID = Column(Integer, primary_key=True, nullable=False)
     lgID = Column(String(2), primary_key=True, nullable=False)
-    managerID = Column(String(10), primary_key=True, nullable=False)
+    playerID = Column(String(9), primary_key=True, nullable=False)
     pointsWon = Column(Integer)
     pointsMax = Column(Integer)
     votesFirst = Column(Integer)
@@ -207,7 +207,7 @@ class FieldingPost(Base):
 class HallOfFame(Base):
     __tablename__ = u'HallOfFame'
 
-    hofID = Column(String(10), primary_key=True, nullable=False)
+    playerID = Column(String(9), primary_key=True, nullable=False)
     yearid = Column(Integer, primary_key=True, nullable=False)
     votedBy = Column(String(64), primary_key=True, nullable=False, server_default=text("''"))
     ballots = Column(Integer)
@@ -221,7 +221,7 @@ class HallOfFame(Base):
 class Manager(Base):
     __tablename__ = u'Managers'
 
-    managerID = Column(String(10))
+    playerID = Column(String(9))
     yearID = Column(Integer, primary_key=True, nullable=False)
     teamID = Column(String(3), primary_key=True, nullable=False)
     lgID = Column(String(2))
@@ -236,7 +236,7 @@ class Manager(Base):
 class ManagersHalf(Base):
     __tablename__ = u'ManagersHalf'
 
-    managerID = Column(String(10), primary_key=True, nullable=False)
+    playerID = Column(String(9), primary_key=True, nullable=False)
     yearID = Column(Integer, primary_key=True, nullable=False)
     teamID = Column(String(3), primary_key=True, nullable=False)
     lgID = Column(String(2))
@@ -251,9 +251,7 @@ class ManagersHalf(Base):
 class Master(Base):
     __tablename__ = u'Master'
 
-    lahmanID = Column(Integer, primary_key=True)
-    playerID = Column(String(10))
-    managerID = Column(String(10))
+    playerID = Column(String(9), primary_key=True, server_default=text("''"))
     hofID = Column(String(10))
     birthYear = Column(Integer)
     birthMonth = Column(Integer)
