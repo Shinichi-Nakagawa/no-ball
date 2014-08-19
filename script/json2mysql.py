@@ -23,14 +23,13 @@ class JsonToMySQL(object):
         self.base_path = base_path
         self.data_path = os.path.join(self.base_path, self.JSON_DATA_DIR)
         self.json_files = os.listdir(self.data_path)
+        self.module = __import__(JsonToMySQL.BASE_MODULE, globals(), locals(), [], 0)
         self.session = session
 
     def run(self):
         """
         実行
         """
-        print('Get module')
-        module = __import__(JsonToMySQL.BASE_MODULE, globals(), locals(), [], 0)
         print('Open database connection')
 
         for json_file in self.json_files:
@@ -40,29 +39,49 @@ class JsonToMySQL(object):
             json_file_fullpath = os.path.join(self.data_path, json_file)
             print('for row in rows')
             fp = open(json_file_fullpath, mode='r')
-            # get cls
-            if 'ies' in root:
-                class_name = re.sub(r'ies$', 'y', root)
-            else:
-                class_name = re.sub(r's$', '', root)
-            cls = getattr(module, class_name)
-            print(cls)
-            print(dir(cls))
+            cls = self._get_class(root)
 
             # get model class
-            self._save_rows(json.load(fp))
+            self._save_rows(json.load(fp), cls)
 
         print('Close database connection')
 
-    def _save_rows(self, rows):
+    def _get_class(self, base_name):
+        """
+        JSON file name to class
+        :param base_name: JSON file name(base)
+        :return: SQLAlchemy Model class
+        """
+        # 名前が複数形の場合は単数形にして取得
+        if 'ies' in base_name:
+            class_name = re.sub(r'ies$', 'y', base_name)
+        else:
+            class_name = re.sub(r's$', '', base_name)
+        return getattr(self.module, class_name)
+
+    def _save_rows(self, rows, cls):
         """
         テーブルに保存
         :param rows: json records
+        :param cls: SQLAlchemy Model class
         :return: None
         """
         for row in rows:
-            pass
-            # print(row)
+            model = self._get_model(row, cls)
+
+    def _get_model(self, values, cls):
+        """
+        内容を詰める
+        :param value:
+        :param cls:
+        :return: model
+        """
+        model = cls()
+        for k, v in values.items():
+            if k in dir(model):
+                setattr(model, k, v)
+
+        return model
 
 
 def main(path):
