@@ -9,7 +9,6 @@ __author__ = 'Shinichi Nakagawa'
 import os
 import json
 import re
-import tables
 
 
 class JsonToMySQL(object):
@@ -68,6 +67,8 @@ class JsonToMySQL(object):
         """
         for row in rows:
             model = self._get_model(row, cls)
+            self.session.add(model)
+            self.session.commit()
 
     def _get_model(self, values, cls):
         """
@@ -84,8 +85,17 @@ class JsonToMySQL(object):
         return model
 
 
+from sqlalchemy import *
+from sqlalchemy.orm import *
+
+from script.database_config import CONNECTION_TEXT, ENCODING
+
+
 def main(path):
-    lh = JsonToMySQL(base_path=path, session=None)
+    engine = create_engine(CONNECTION_TEXT, encoding=ENCODING)
+    Session = sessionmaker(bind=engine, autoflush=True)
+    Session.configure(bind=engine)
+    lh = JsonToMySQL(base_path=path, session=Session())
     lh.run()
 
 
