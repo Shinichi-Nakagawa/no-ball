@@ -12,10 +12,16 @@ import re
 
 
 class JsonToMySQL(object):
+
     BASE_DIR = 'data'
     JSON_DATA_DIR = 'output'
     ENCODING = 'utf-8'
     BASE_MODULE = 'tables'
+    DICT_COLUMN = {
+        '2B': '_2B',
+        '3B': '_3B',
+    }
+
 
     def __init__(self, base_path='', session=None):
         # パスとか設定
@@ -79,8 +85,12 @@ class JsonToMySQL(object):
         """
         model = cls()
         for k, v in values.items():
-            if k in dir(model):
-                setattr(model, k, v)
+            if k in JsonToMySQL.DICT_COLUMN.keys():
+                key = JsonToMySQL.DICT_COLUMN.get(k)
+            else:
+                key = k
+            if key in dir(model):
+                setattr(model, key, v)
 
         return model
 
