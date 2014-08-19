@@ -8,8 +8,8 @@ ENCODING = 'utf-8'
 PARAMS = {
     'dialect': 'mysql',
     'driver': 'pymysql',
-    'user': 'baseball',
-    'password': 'dereKJeter',
+    'user': 'username',
+    'password': 'password',
     'host': '192.168.33.10',
     'port': '3306',
     'database': 'sean_lahman'
