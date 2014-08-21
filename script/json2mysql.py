@@ -22,7 +22,6 @@ class JsonToMySQL(object):
         '3B': '_3B',
     }
 
-
     def __init__(self, base_path='', session=None):
         # パスとか設定
         self.base_path = base_path
