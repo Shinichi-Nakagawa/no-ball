@@ -8,7 +8,8 @@ from django.http import HttpResponseRedirect
 
 from django.views.generic import TemplateView
 from noball_django.settings import VIEW_ENCODE
-from mlb.form import SearchForm
+from service.const import MAX_YEAR, LEAGUE_AL, LEAGUES
+from mlb.form import SearchForm, PytagorasForm
 from mlb.service.mlb_service import MLBService
 from mlb.models import Team
 
@@ -48,7 +49,7 @@ class PythagorasView(BaseView):
 
     def get_context_data(self, **kwargs):
         context = super(PythagorasView, self).get_context_data(**kwargs)
-        context['year'], context['league'] = 2013, 'AL'
+        context['year'], context['league'], context['leagues'] = MAX_YEAR, LEAGUE_AL, LEAGUES
         teams = Team.objects.filter(yearID=context['year']).filter(lgID=context['league']).order_by('divID', 'Rank')
         context['dataset'] = self.service.get_pythagoras_dataset(teams)
         return context
@@ -121,8 +122,27 @@ def search(request):
 
 
 def pythagoras_search(request):
+    """
+    ピタゴラス勝率(Form検索)
+    :param request: request object
+    :return: html
+    """
+    service = MLBService(VIEW_ENCODE)
+    context = service.get_base_context()
+    template_html = "%s/pythagoras.html" % (MLBService.SUB_DOMAIN)
+
     if request.method == 'POST':
-        return _search(request, 'pythagoras')
+        form = PytagorasForm(request.POST)
+        if form.is_valid():
+            year = form.cleaned_data['year']
+            league = form.cleaned_data['league']
+            context['year'], context['league'], context['leagues'] = year, league, LEAGUES
+            teams = Team.objects.filter(yearID=context['year']).filter(lgID=context['league']).order_by('divID', 'Rank')
+            context['dataset'] = service.get_pythagoras_dataset(teams)
+            context['search_action'] = 'pythagoras_search'
+        return render_to_response(
+            template_html, context, context_instance=RequestContext(request)
+        )
 
 
 

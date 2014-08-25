@@ -34,7 +34,7 @@ class MLBService(object):
     BASE_SALARY = 1000000
 
     # ピタゴラス勝率のべき乗
-    PYTHAGORIAN_POWER = 2
+    PYTHAGORIAN_POWER = 1.8
 
     def __init__(self, encode):
         locale.setlocale(locale.LC_NUMERIC, encode)
@@ -97,7 +97,7 @@ class MLBService(object):
         :param ra: Runs Allowed
         :return: pythagorean expectation
         """
-        r_power = r ^ MLBService.PYTHAGORIAN_POWER
-        ra_power = ra ^ MLBService.PYTHAGORIAN_POWER
+        r_power = r ** MLBService.PYTHAGORIAN_POWER
+        ra_power = ra ** MLBService.PYTHAGORIAN_POWER
         return round(r_power / (r_power + ra_power), 3)
 

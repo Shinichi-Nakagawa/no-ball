@@ -111,6 +111,12 @@ $(function () {
 {% endblock %}
 {% comment %}ページ名（静的）{% endcomment %}
 {% block page_title %}{% endblock %}
+{% comment %}検索フォーム{% endcomment %}
+{% block search_form %}
+    <form role="search" method="post" action="/{{ SUB_DOMAIN }}/pythagoras_search/">
+    {% include "mlb/base/pythagoras_form.html" %}
+    </form>
+{% endblock %}
 {% comment %}サービス名{% endcomment %}
 {% block player_name %}{%  endblock %}
 {% comment %}コンテンツ（動的）{% endcomment %}
