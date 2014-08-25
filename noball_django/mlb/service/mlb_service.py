@@ -59,8 +59,9 @@ class MLBService(object):
         :param teams: Team Model List
         :return: pythagoras % list
         """
-        datasets = [
-            {
+        datasets = []
+        for t in teams:
+            d = {
                 'team': t.teamID,
                 'name': t.name,
                 'div': t.divID,
@@ -72,10 +73,10 @@ class MLBService(object):
                 'er': t.ER,
                 'win_p': MLBService.calc_winning_percentage(t.W, t.G),
                 'pyt_p': MLBService.calc_pythagorean_expectation(t.R, t.RA)
-
             }
-             for t in teams
-        ]
+            d['pyt_p_w'] = round(t.G * d['pyt_p'], 0)
+            d['pyt_p_l'] = t.G - d['pyt_p_w']
+            datasets.append(d)
         return datasets
 
     @classmethod
@@ -86,7 +87,7 @@ class MLBService(object):
         :param g: games
         :return: winning percentage
         """
-        return w / g
+        return round(w / g, 3)
 
     @classmethod
     def calc_pythagorean_expectation(cls, r, ra):
@@ -98,5 +99,5 @@ class MLBService(object):
         """
         r_power = r ^ MLBService.PYTHAGORIAN_POWER
         ra_power = ra ^ MLBService.PYTHAGORIAN_POWER
-        return r_power / (r_power + ra_power)
+        return round(r_power / (r_power + ra_power), 3)
 
