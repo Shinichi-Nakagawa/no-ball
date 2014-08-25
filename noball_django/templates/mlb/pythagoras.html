@@ -1,0 +1,36 @@
+{% extends "mlb/base/base.html" %}
+{% comment %}
+ピタゴラス勝率
+{% endcomment %}
+{% comment %}タイトル（固定）{% endcomment %}
+{% block title %}{{ APPLICATION_NAME }} - Pythagorean expectation{% endblock %}
+{% comment %}検索Action名 {% endcomment %}
+{% block search-action %}search{% endblock %}
+{% comment %}ナビゲーターのStatus（固定）{% endcomment %}
+{% block navbar-home %}class="active"{% endblock %}
+{% comment %}パンくず（動的）{% endcomment %}
+{% block breadcrumb %}
+{% endblock %}
+{% comment %}ページ名（静的）{% endcomment %}
+{% block page_title %}{% endblock %}
+{% comment %}サービス名{% endcomment %}
+{% block player_name %}{%  endblock %}
+{% comment %}コンテンツ（動的）{% endcomment %}
+{% block content %}
+    {% comment %}これから作る{% endcomment %}
+    <div class="container">
+      <div class="row">
+        ここにグラフ
+
+      </div>
+
+    </div>
+
+{% endblock %}
+{% comment %}
+コンテンツデータ（動的）
+
+今のところナシ、将来はアリ（多分）
+{% endcomment %}
+{% block data_content %}
+{% endblock %}
