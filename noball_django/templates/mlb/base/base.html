@@ -20,9 +20,18 @@ BASE Template.
     <link rel="stylesheet" href="{{ STATIC_URL }}font-awesome/css/font-awesome.min.css">
     {% comment %}Page Specific CSS {% endcomment %}
     <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
+    {% comment %}Bootstrap core JavaScript {% endcomment %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
+    {% comment %}Header JavaScript {% endcomment %}
+    {% block header_script %}
+    {% endblock %}
   </head>
 
   <body>
+    {% comment %}Page content JavaScript {% endcomment %}
+    {% block body_script %}
+    {% endblock %}
 
     <div id="wrapper">
 
@@ -81,12 +90,6 @@ BASE Template.
 
     </div>{% comment %}/#wrapper {% endcomment %}
 
-    {% comment %}Bootstrap core JavaScript {% endcomment %}
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
-    {% comment %}Page Specific Plugins {% endcomment %}
-    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-    <script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>
   {% block data_content %}
   {% endblock %}
   </body>

@@ -65,6 +65,7 @@ class MLBService(object):
                 'name': t.name,
                 'div': t.divID,
                 'rank': t.Rank,
+                'g': t.G,
                 'w': t.W,
                 'l': t.L,
                 'r': t.R,

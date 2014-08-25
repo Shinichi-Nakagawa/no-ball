@@ -48,7 +48,8 @@ class PythagorasView(BaseView):
 
     def get_context_data(self, **kwargs):
         context = super(PythagorasView, self).get_context_data(**kwargs)
-        teams = Team.objects.filter(yearID=2013).filter(lgID='AL').order_by('divID', 'Rank')
+        context['year'], context['league'] = 2013, 'AL'
+        teams = Team.objects.filter(yearID=context['year']).filter(lgID=context['league']).order_by('divID', 'Rank')
         context['dataset'] = self.service.get_pythagoras_dataset(teams)
         return context
 
