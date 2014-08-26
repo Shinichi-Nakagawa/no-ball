@@ -8,6 +8,7 @@ import locale
 from datetime import datetime
 
 from service.const import POSITION_PITCHER, POSITION_BATTER
+from service.stats import Stats
 from noball_django.settings import APPLICATION_NAME
 
 
@@ -87,20 +88,25 @@ class MLBService(object):
         """
         # statsから必要な値を修得
         # TODO あとでいい方法を考える
-        w, l, era, so, year, teams = 0, 0, 0.0, 0, 0, []
+        w, l, so, er, ipo, year, teams = 0, 0, 0, 0, 0, 0, []
         if len(stats) > 0:
             year = stats[0][0]
             for s in stats[0][1]:
                 w = w + s.W
                 l = l + s.L
                 so = so + s.SO
+                er = er + s.ER
+                ipo = ipo + s.IPouts
                 teams.append(s.teamID)
+
+        # ipを計算
+        ip = Stats.ip(ipo)
 
         _prof = self._get_base_profile(player, year, teams, salary)
         _prof['position'] = POSITION_PITCHER.upper()
         _prof['win'] = w
         _prof['lose'] = l
-        _prof['era'] = era
+        _prof['era'] = Stats.era(er, ip)
         _prof['so'] = so
         return _prof
 
@@ -113,17 +119,19 @@ class MLBService(object):
         :return: batter profile(dict)
         """
         # statsから必要な値を修得
-        hr, rbi, avg, year, teams = 0, 0, 0.0, 0, []
+        hr, rbi, h, ab, year, teams = 0, 0, 0, 0, 0, []
         if len(stats) > 0:
             year = stats[0][0]
             for s in stats[0][1]:
+                h = h + s.H
+                ab = ab + s.AB
                 hr = hr + s.HR
                 rbi = rbi + s.RBI
                 teams.append(s.teamID)
 
         _prof = self._get_base_profile(player, year, teams, salary)
         _prof['position'] = POSITION_BATTER.upper()
-        _prof['avg'] = ''
+        _prof['avg'] = Stats.avg(h, ab)
         _prof['hr'] = hr
         _prof['rbi'] = rbi
         return _prof
@@ -146,7 +154,8 @@ class MLBService(object):
             'country': player.birthCountry,
             'city': player.birthCity,
             'bats': player.bats,
-            'throws': player.throws
+            'throws': player.throws,
+            'display_name': ' '.join([player.nameFirst, player.nameLast])
 
         }
 
@@ -161,7 +170,23 @@ class MLBService(object):
         if len(salary) > 0:
             for s in salary[0][1]:
                 sal = sal + s.salary
-        return sal
+        return MLBService._get_salary(sal)
+
+    @classmethod
+    def _get_salary(cls, money):
+        """
+        表示用のsalary
+        :param money: salary
+        :return: (str) salary
+        """
+        # SALARY編集
+        if money == None or money == '':
+            return '?'
+        _money = int(money)
+        if _money >= MLBService.BASE_SALARY:
+            return '%s%sM' % (MLBService.CURRENCY, "{:n}".format(_money / MLBService.BASE_SALARY))
+        else:
+            return '%s%s' % (MLBService.CURRENCY, "{:n}".format(_money))
 
     @classmethod
     def calc_age(cls, year):

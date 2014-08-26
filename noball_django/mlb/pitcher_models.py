@@ -43,40 +43,5 @@ class Pitching(models.Model):
     SF = models.IntegerField(max_length=11)
     GIDP = models.IntegerField(max_length=11)
 
-    def ip(self, ):
-        """
-        Inning Pitched
-        :return: (float)ip
-        """
-        return float(self.IPouts / 3, 3)
-
-    def whip(self, ):
-        """
-        Walks + Hits / IP
-        :return: (float)whip
-        """
-        return round((self.BB + self.H) / self.ip(), 3)
-
-    def h9(self, ):
-        """
-        Hits / 9
-        :return:(float)h9
-        """
-        return round((9 * self.H) / self.ip(), 3)
-
-    def bb9(self ,):
-        """
-        BB / 9
-        :return:(float)bb9
-        """
-        return round((9 * self.BB) / self.ip(), 3)
-
-    def hr9(self, ):
-        """
-        HR / 9
-        :return:(float)hr9
-        """
-        return round((9 * self.HR) / self.ip(), 3)
-
     class Meta():
         db_table = 'Pitching'

@@ -11,8 +11,8 @@
 {% comment %}パンくず（動的）{% endcomment %}
 {% block breadcrumb %}
 <ol class="breadcrumb">
-    <li><a href="/{{ SUB_DOMAIN }}/home/?{{ QUERY_KEY }}={{ query_name }}"><i class="fa fa-user"></i>{{ player.name }}</a></li>
-    <li class="active"><i class="fa fa-home"></i> Profile</li>
+    <li><a href="/{{ SUB_DOMAIN }}/home/?{{ QUERY_KEY }}={{ query_name }}"><i class="fa fa-home"></i>{{ player.name }}</a></li>
+    <li class="active"><i class="fa fa-user">{{ player.display_name }}</i> </li>
 </ol>
 {% endblock %}
 {% comment %}検索フォーム{% endcomment %}
@@ -22,7 +22,7 @@
     </form>
 {% endblock %}
 {% comment %}選手名（動的）{% endcomment %}
-{% block player_name %}<a href="{{ player.url }}" target="_blank">{{ player.name }}</a>{%  endblock %}
+{% block player_name %}<a href="{{ player.url }}" target="_blank">{{ player.display_name }}</a>{%  endblock %}
 {% comment %}コンテンツ（動的）{% endcomment %}
 {% block content %}
     {% ifequal pos PLAYER_BATTER %}
