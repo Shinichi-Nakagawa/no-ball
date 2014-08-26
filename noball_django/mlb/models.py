@@ -1,11 +1,67 @@
-from django.db import models
 
 # Create your models here.
-import json
 from django.db import models
+
+
+class Master(models.Model):
+    """
+    Player profile
+    """
+
+    playerID = models.CharField(max_length=9, primary_key=True, default='', null=False)
+    hofID = models.CharField(max_length=10)
+    birthYear = models.IntegerField(max_length=11)
+    birthMonth = models.IntegerField(max_length=11)
+    birthDay = models.IntegerField(max_length=11)
+    birthCountry = models.CharField(max_length=50)
+    birthState = models.CharField(max_length=2)
+    birthCity = models.CharField(max_length=50)
+    deathYear = models.IntegerField(max_length=11)
+    deathMonth = models.IntegerField(max_length=11)
+    deathDay = models.IntegerField(max_length=11)
+    deathCountry = models.CharField(max_length=50)
+    deathState = models.CharField(max_length=2)
+    deathCity = models.CharField(max_length=50)
+    nameFirst = models.CharField(max_length=50)
+    nameLast = models.CharField(max_length=50)
+    nameNote = models.CharField(max_length=255)
+    nameGiven = models.CharField(max_length=255)
+    nameNick = models.CharField(max_length=255)
+    weight = models.IntegerField(max_length=11)
+    height = models.FloatField()
+    bats = models.CharField(max_length=1)
+    throws = models.CharField(max_length=1)
+    debut = models.CharField(max_length=10)
+    finalGame = models.CharField(max_length=10)
+    college = models.CharField(max_length=50)
+    lahman40ID = models.CharField(max_length=9)
+    lahman45ID = models.CharField(max_length=9)
+    retroID = models.CharField(max_length=9)
+    holtzID = models.CharField(max_length=9)
+    bbrefID = models.CharField(max_length=9)
+
+    class Meta():
+        db_table = 'Master'
+
+
+class Salary(models.Model):
+    """
+    Player Salary
+    """
+    yearID = models.IntegerField(max_length=11, primary_key=True, null=False)
+    teamID = models.CharField(max_length=3, primary_key=True, null=False)
+    lgID = models.CharField(max_length=2, primary_key=True, null=False)
+    playerID = models.CharField(max_length=9, primary_key=True, null=False)
+    salary = models.FloatField()
+
+    class Meta():
+        db_table = 'Salaries'
 
 
 class Team(models.Model):
+    """
+    Team stats
+    """
 
     yearID = models.IntegerField(max_length=11, primary_key=True, null=False)
     lgID = models.CharField(max_length=2, primary_key=True, null=False)
@@ -55,12 +111,6 @@ class Team(models.Model):
     teamIDBR = models.CharField(max_length=3)
     teamIDlahman45 = models.CharField(max_length=3)
     teamIDretro = models.CharField(max_length=3)
-
-    def get_profile_2_dict(self):
-        """
-        Profile(JSON) to Dictionary
-        """
-        return json.loads(self.profile)
 
     class Meta():
         db_table = 'Teams'
