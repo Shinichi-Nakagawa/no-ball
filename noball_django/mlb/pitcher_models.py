@@ -44,4 +44,4 @@ class Pitching(models.Model):
     GIDP = models.IntegerField(max_length=11)
 
     class Meta():
-        db_table = 'Batting'
+        db_table = 'Pitching'

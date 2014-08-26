@@ -25,10 +25,10 @@
 {% block player_name %}<a href="{{ player.url }}" target="_blank">{{ player.name }}</a>{%  endblock %}
 {% comment %}コンテンツ（動的）{% endcomment %}
 {% block content %}
-    {% ifequal player.flg PLAYER_BATTER %}
+    {% ifequal pos PLAYER_BATTER %}
         {% include "mlb/content/index_batter.html" %}
     {% endifequal %}
-    {% ifequal player.flg PLAYER_PITCHER %}
+    {% ifequal pos PLAYER_PITCHER %}
         {% include "mlb/content/index_pitcher.html" %}
     {% endifequal %}
 {% endblock %}

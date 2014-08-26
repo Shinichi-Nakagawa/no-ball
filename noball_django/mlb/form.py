@@ -8,7 +8,7 @@ __author__ = 'Shinichi Nakagawa'
 
 
 class SearchForm(forms.Form):
-    player_name = forms.CharField(max_length=255)
+    query_word = forms.CharField(max_length=255)
 
 
 class PytagorasForm(forms.Form):

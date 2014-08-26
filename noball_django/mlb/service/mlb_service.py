@@ -6,6 +6,7 @@
 
 import locale
 
+from service.const import POSITION_PITCHER, POSITION_BATTER
 from noball_django.settings import APPLICATION_NAME
 
 
@@ -18,10 +19,6 @@ class MLBService(object):
     SUB_DOMAIN = 'mlb'
     # Queryのキー名
     QUERY_KEY = 'query_word'
-
-    # Playerの区分(野手or投手)
-    PLAYER_BATTER = 'b'
-    PLAYER_PITCHER = 'p'
 
     # 右/左/両の略称
     SHORT_NAME_RIGHT = 'R'
@@ -48,8 +45,8 @@ class MLBService(object):
             'APPLICATION_NAME': APPLICATION_NAME,
             'QUERY_KEY': MLBService.QUERY_KEY,
             'SUB_DOMAIN': MLBService.SUB_DOMAIN,
-            'PLAYER_BATTER': MLBService.PLAYER_BATTER,
-            'PLAYER_PITCHER': MLBService.PLAYER_PITCHER,
+            'PLAYER_BATTER': POSITION_BATTER,
+            'PLAYER_PITCHER': POSITION_PITCHER,
             'MENU_ENABLE': True,
         }
 
@@ -78,6 +75,26 @@ class MLBService(object):
             d['pyt_p_l'] = t.G - d['pyt_p_w']
             datasets.append(d)
         return datasets
+
+    def get_home_value_pitcher(self, player, player_stats):
+        """
+        Pitcher profile
+        :param player: Player stats
+        :param player_stats: Player stats
+        :return: pitcher profile(dict)
+        """
+        _prof = {}
+        return _prof
+
+    def get_home_value_batter(self, player, player_stats):
+        """
+        Batter profile
+        :param player: Player stats
+        :param player_stats: Player stats
+        :return: batter profile(dict)
+        """
+        _prof = {}
+        return _prof
 
     @classmethod
     def calc_winning_percentage(cls, w, g):
