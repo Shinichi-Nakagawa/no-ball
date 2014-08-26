@@ -5,6 +5,7 @@
 """
 
 import locale
+from datetime import datetime
 
 from service.const import POSITION_PITCHER, POSITION_BATTER
 from noball_django.settings import APPLICATION_NAME
@@ -83,7 +84,12 @@ class MLBService(object):
         :param player_stats: Player stats
         :return: pitcher profile(dict)
         """
-        _prof = {}
+        _prof = self._get_base_profile(player, player_stats)
+        _prof['position'] = POSITION_PITCHER.upper()
+        _prof['win'] = player_stats[0].W
+        _prof['lose'] = player_stats[0].L
+        _prof['era'] = player_stats[0].ERA
+        _prof['so'] = player_stats[0].SO
         return _prof
 
     def get_home_value_batter(self, player, player_stats):
@@ -93,8 +99,42 @@ class MLBService(object):
         :param player_stats: Player stats
         :return: batter profile(dict)
         """
-        _prof = {}
+        _prof = self._get_base_profile(player, player_stats)
+        _prof['position'] = POSITION_BATTER.upper()
+        _prof['avg'] = player_stats[0].avg()
+        _prof['hr'] = player_stats[0].HR
+        _prof['rbi'] = player_stats[0].RBI
         return _prof
+
+    def _get_base_profile(self, player, player_stats):
+        """
+        Profile(Base)
+        :param player: Player stats
+        :param player_stats: Player stats
+        :return: profile(dict)
+        """
+        return {
+            'year': player_stats[0].yearID,
+            'team': player_stats[0].teamID,
+            'age': MLBService.calc_age(player.birthYear),
+            'birthday': '%d/%d/%d' % (player.birthYear, player.birthMonth, player.birthDay),
+            'salary': 'salary',
+            'country': player.birthCountry,
+            'city': player.birthCity,
+            'bats': player.bats,
+            'throws': player.throws
+
+        }
+
+    @classmethod
+    def calc_age(cls, year):
+        """
+        calculate age
+        :param year: (int)birth year
+        :return: (int) age
+        """
+        now = datetime.now()
+        return now.year - year
 
     @classmethod
     def calc_winning_percentage(cls, w, g):
