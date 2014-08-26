@@ -77,54 +77,91 @@ class MLBService(object):
             datasets.append(d)
         return datasets
 
-    def get_home_value_pitcher(self, player, player_stats):
+    def get_home_value_pitcher(self, player, stats, salary):
         """
         Pitcher profile
-        :param player: Player stats
-        :param player_stats: Player stats
+        :param player: Player master model
+        :param stats: Player stats model
+        :param salary: Player salary model
         :return: pitcher profile(dict)
         """
-        _prof = self._get_base_profile(player, player_stats)
+        # statsから必要な値を修得
+        # TODO あとでいい方法を考える
+        w, l, era, so, year, teams = 0, 0, 0.0, 0, 0, []
+        if len(stats) > 0:
+            year = stats[0][0]
+            for s in stats[0][1]:
+                w = w + s.W
+                l = l + s.L
+                so = so + s.SO
+                teams.append(s.teamID)
+
+        _prof = self._get_base_profile(player, year, teams, salary)
         _prof['position'] = POSITION_PITCHER.upper()
-        _prof['win'] = player_stats[0].W
-        _prof['lose'] = player_stats[0].L
-        _prof['era'] = player_stats[0].ERA
-        _prof['so'] = player_stats[0].SO
+        _prof['win'] = w
+        _prof['lose'] = l
+        _prof['era'] = era
+        _prof['so'] = so
         return _prof
 
-    def get_home_value_batter(self, player, player_stats):
+    def get_home_value_batter(self, player, stats, salary):
         """
         Batter profile
-        :param player: Player stats
-        :param player_stats: Player stats
+        :param player: Player master model
+        :param stats: Player stats model
+        :param salary: Player salary model
         :return: batter profile(dict)
         """
-        _prof = self._get_base_profile(player, player_stats)
+        # statsから必要な値を修得
+        hr, rbi, avg, year, teams = 0, 0, 0.0, 0, []
+        if len(stats) > 0:
+            year = stats[0][0]
+            for s in stats[0][1]:
+                hr = hr + s.HR
+                rbi = rbi + s.RBI
+                teams.append(s.teamID)
+
+        _prof = self._get_base_profile(player, year, teams, salary)
         _prof['position'] = POSITION_BATTER.upper()
-        _prof['avg'] = player_stats[0].avg()
-        _prof['hr'] = player_stats[0].HR
-        _prof['rbi'] = player_stats[0].RBI
+        _prof['avg'] = ''
+        _prof['hr'] = hr
+        _prof['rbi'] = rbi
         return _prof
 
-    def _get_base_profile(self, player, player_stats):
+    def _get_base_profile(self, player, year, teams, salary):
         """
         Profile(Base)
-        :param player: Player stats
-        :param player_stats: Player stats
+        :param player: Player master model
+        :param year: Last play year
+        :param teams: teams
+        :param salary: Player salary model
         :return: profile(dict)
         """
         return {
-            'year': player_stats[0].yearID,
-            'team': player_stats[0].teamID,
+            'year': year,
+            'team': ','.join(teams),
             'age': MLBService.calc_age(player.birthYear),
             'birthday': '%d/%d/%d' % (player.birthYear, player.birthMonth, player.birthDay),
-            'salary': 'salary',
+            'salary': MLBService._calc_salary(salary),
             'country': player.birthCountry,
             'city': player.birthCity,
             'bats': player.bats,
             'throws': player.throws
 
         }
+
+    @classmethod
+    def _calc_salary(cls, salary):
+        """
+        年俸計算
+        :param salary: salary model list
+        :return:
+        """
+        sal = 0
+        if len(salary) > 0:
+            for s in salary[0][1]:
+                sal = sal + s.salary
+        return sal
 
     @classmethod
     def calc_age(cls, year):

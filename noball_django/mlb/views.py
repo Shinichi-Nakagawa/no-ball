@@ -66,9 +66,9 @@ class PlayerView(BaseView):
 
         _content = {}
         if POSITION_BATTER == context['pos']:
-            return self._get_batter_content(context['player'], context['stats'])
+            return self._get_batter_content(context['player'], context['stats'], context['salary'])
         elif POSITION_PITCHER == context['pos']:
-            return self._get_pitcher_content(context['player'], context['stats'])
+            return self._get_pitcher_content(context['player'], context['stats'], context['salary'])
         else:
             raise MlbBaseballException()
 
@@ -99,11 +99,20 @@ class PlayerView(BaseView):
 
         return model, pos, salary
 
-    def _get_model_filter_player_order_by_year_desc(self, model, player_id, limit=3):
+    def _get_model_filter_player_order_by_year_desc(self, model, player_id, before=3):
         """
         search model
         """
-        return model.objects.filter(playerID=player_id).order_by('-yearID').all()[:limit]
+        # 年度の降順で最新のレコードを取得、年度ごとにDictに詰めて降順で返す
+        rows = {}
+        if model.objects.filter(playerID=player_id).order_by('-yearID').count() > 0:
+            row = model.objects.filter(playerID=player_id).order_by('-yearID').all()[:1]
+            for m in model.objects.filter(playerID=player_id)\
+                .filter(yearID__range=(row[0].yearID - before, row[0].yearID)).order_by('-yearID').all():
+                if m.yearID not in rows:
+                    rows[m.yearID] = []
+                rows[m.yearID].append(m)
+        return sorted(rows.items(), key=lambda x: x[0], reverse=True)
 
 
 class MlbBaseballException(Exception):
@@ -128,13 +137,13 @@ class HomeView(PlayerView):
             context['values'] = self.get_response_value(context)
         return context
 
-    def _get_batter_content(self, player, player_stats):
+    def _get_batter_content(self, player, player_stats, salary):
         # Serviceを呼び出す
-        return self.service.get_home_value_batter(player, player_stats)
+        return self.service.get_home_value_batter(player, player_stats, salary)
 
-    def _get_pitcher_content(self, player, player_stats):
+    def _get_pitcher_content(self, player, player_stats, salary):
         # Serviceを呼び出す
-        return self.service.get_home_value_pitcher(player, player_stats)
+        return self.service.get_home_value_pitcher(player, player_stats, salary)
 
 
 class PythagorasView(BaseView):
