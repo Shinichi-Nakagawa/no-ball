@@ -53,7 +53,7 @@ class PlayerView(BaseView):
             # 全画面共通のContext(PlayerModelの中身)
             context['player'] = self._get_player(first, last)
             # 成績情報(PlayerStatsModelの中身)
-            context['player_stats'], context['pos'] = self._get_player_stats(context['player'].playerID)
+            context['stats'], context['pos'], context['salary'] = self._get_player_stats(context['player'].playerID)
         else:
             context['MENU_ENABLE'] = False
         return context
@@ -66,9 +66,9 @@ class PlayerView(BaseView):
 
         _content = {}
         if POSITION_BATTER == context['pos']:
-            return self._get_batter_content(context['player'], context['player_stats'])
+            return self._get_batter_content(context['player'], context['stats'])
         elif POSITION_PITCHER == context['pos']:
-            return self._get_pitcher_content(context['player'], context['player_stats'])
+            return self._get_pitcher_content(context['player'], context['stats'])
         else:
             raise MlbBaseballException()
 
@@ -87,17 +87,23 @@ class PlayerView(BaseView):
         count_pitch = Pitching.objects.filter(playerID=playerID).count()
 
         # 検索対象のモデルと戻り値
-        model, pos = None, None
         if count_atbat > count_pitch:
             # Batter
-            model = Batting
+            model = self._get_model_filter_player_order_by_year_desc(Batting, playerID)
             pos = POSITION_BATTER
         else:
             # Pitcher
-            model = Pitching
+            model = self._get_model_filter_player_order_by_year_desc(Pitching, playerID)
             pos = POSITION_PITCHER
+        salary = self._get_model_filter_player_order_by_year_desc(Salary, playerID)
 
-        return model.objects.filter(playerID=playerID).order_by('-yearID').all()[:3], pos
+        return model, pos, salary
+
+    def _get_model_filter_player_order_by_year_desc(self, model, player_id, limit=3):
+        """
+        search model
+        """
+        return model.objects.filter(playerID=player_id).order_by('-yearID').all()[:limit]
 
 
 class MlbBaseballException(Exception):
