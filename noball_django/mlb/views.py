@@ -106,12 +106,15 @@ class PlayerView(BaseView):
         # 年度の降順で最新のレコードを取得、年度ごとにDictに詰めて降順で返す
         rows = {}
         if model.objects.filter(playerID=player_id).order_by('-yearID').count() > 0:
+            # 一番最後のシーズンの成績を取得(一行だけ)
             row = model.objects.filter(playerID=player_id).order_by('-yearID').all()[:1]
+            # 最後のシーズンから過去3年分を取得、年度が一緒のモノはchunkする
             for m in model.objects.filter(playerID=player_id)\
                 .filter(yearID__range=(row[0].yearID - before, row[0].yearID)).order_by('-yearID').all():
                 if m.yearID not in rows:
                     rows[m.yearID] = []
                 rows[m.yearID].append(m)
+        # 年度の降順でsortし直す
         return sorted(rows.items(), key=lambda x: x[0], reverse=True)
 
 
@@ -130,6 +133,24 @@ class TopView(BaseView):
 
 class HomeView(PlayerView):
     template_name = "%s/home.html" % (MLBService.SUB_DOMAIN)
+
+    def get_context_data(self, **kwargs):
+        context = super(HomeView, self).get_context_data(**kwargs)
+        if 'player' in context:
+            context['values'] = self.get_response_value(context)
+        return context
+
+    def _get_batter_content(self, player, player_stats, salary):
+        # Serviceを呼び出す
+        return self.service.get_home_value_batter(player, player_stats, salary)
+
+    def _get_pitcher_content(self, player, player_stats, salary):
+        # Serviceを呼び出す
+        return self.service.get_home_value_pitcher(player, player_stats, salary)
+
+
+class SabrView(PlayerView):
+    template_name = "%s/sabr.html" % (MLBService.SUB_DOMAIN)
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)

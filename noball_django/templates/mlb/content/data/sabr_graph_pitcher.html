@@ -8,15 +8,15 @@ Graphデータ（投手）
 WAR
 {% endcomment %}
 Morris.Line({
-  element: 'morris-war',
+  element: 'morris-whip',
   data: [
       {% for row in data.war_list %}
-    	{ year: '{{ row.year }}', war: {{ row.war }}},
+    	{ year: '{{ row.year }}', war: {{ row.whip }}},
       {% endfor %}
   ],
   xkey: 'year',
-  ykeys: ['war'],
-  labels: ['WAR'],
+  ykeys: ['whip'],
+  labels: ['WHIP'],
   smooth: false,
   hideHover: 'auto',
   ymax:10,

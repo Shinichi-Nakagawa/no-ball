@@ -4,6 +4,12 @@
 {% endcomment %}
 {% comment %}タイトル（固定）{% endcomment %}
 {% block title %}SABR - {{ APPLICATION_NAME }}{% endblock %}
+{% comment %}コンテンツ用スクリプト{% endcomment %}
+{% block body_script %}
+    <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>
+{% endblock %}
 {% comment %}検索Action名 {% endcomment %}
 {% block search-action %}/{{ SUB_DOMAIN }}/sabr_search{% endblock %}
 {% comment %}ナビゲーターのStatus（固定）{% endcomment %}

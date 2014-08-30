@@ -50,6 +50,16 @@ class Stats(object):
         return round((9 * h) / ip, 3)
 
     @classmethod
+    def so9(cls, so, ip):
+        """
+        Strike out / 9
+        :param so: strike out
+        :param ip: inning pitched
+        :return: (float) so9
+        """
+        return round((9 * so) / ip, 3)
+
+    @classmethod
     def bb9(cls, bb, ip):
         """
         BB / 9
@@ -135,3 +145,55 @@ class Stats(object):
         :return: (float) ops
         """
         return obp + slg
+
+    @classmethod
+    def babip(cls, h, hr, ab, so, sf):
+        """
+        Batting average on balls in play(BABIP)
+        :param h: hits
+        :param hr: home run
+        :param ab: at bat
+        :param so: strike out
+        :param sf: sacrifice fly
+        :return: (float) babip
+        """
+        return round((h - hr) / (ab - so - hr + sf), 3)
+
+    @classmethod
+    def rc(cls, h, bb, hbp, cs, gidp, tb, sf, sh, sb, so, ab):
+        """
+        Runs created
+        :param h: hits
+        :param bb: base on ball
+        :param hbp: hit by pitch
+        :param cs: caught stealing
+        :param gidp: ground into duble play
+        :param tb: total bases
+        :param sf: sacrifice fly
+        :param sh: sacrifice hit
+        :param sb: stolen base
+        :param so: strike out
+        :param ab: at bat
+        :return: (float) run created
+        """
+        # (出塁能力A * 進塁能力B) / 出塁機会C
+        a = float(h + bb + hbp - cs - gidp)
+        b = float(tb + 0.26 * (bb + hbp) + 0.53 * (sf + sh) + 0.64 * sb - 0.03 * so)
+        c = ab + bb + hbp + sf + sh
+        return float(((a + 2.4 * c) * (b + 3 * c)/9 * c) - 0.9 * c)
+
+    @classmethod
+    def rc27(cls, rc, ab, h, sh, sf, cs, gidp):
+        """
+        Runs created 27
+        :param rc: run created
+        :param ab: at bat
+        :param h: hits
+        :param sh: sacrifice hit
+        :param sf: sacrifice fly
+        :param cs: caught stealing
+        :param gidp: ground into duble play
+        :return: (float) run created 27
+        """
+        to = ab - h + sh + sf + cs + gidp
+        return float(27 * rc / to)
