@@ -211,4 +211,5 @@ class Stats(object):
         :return: (float) run created 27
         """
         to = ab - h + sh + sf + cs + gidp
-        return float(27 * rc / to)
+        rc27 = round(27 * rc / to)
+        return rc27
