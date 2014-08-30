@@ -4,6 +4,9 @@
 __author__ = 'Shinichi Nakagawa'
 
 
+import math
+
+
 class Stats(object):
 
     def __init__(self):
@@ -160,9 +163,11 @@ class Stats(object):
         return round((h - hr) / (ab - so - hr + sf), 3)
 
     @classmethod
-    def rc(cls, h, bb, hbp, cs, gidp, tb, sf, sh, sb, so, ab):
+    def rc(cls, h, bb, hbp, cs, gidp, sf, sh, sb, so, ab, ibb, single, _2b, _3b, hr):
         """
-        Runs created
+        Runs Created of 2002 ver.
+        [note]
+        http://en.wikipedia.org/wiki/Runs_created#2002_version_of_runs_created
         :param h: hits
         :param bb: base on ball
         :param hbp: hit by pitch
@@ -174,13 +179,23 @@ class Stats(object):
         :param sb: stolen base
         :param so: strike out
         :param ab: at bat
+        :param ibb: intentional base on balls
+        :param single: single hits
+        :param _2b: double
+        :param _3b: triple
+        :param hr: home run
         :return: (float) run created
         """
         # (出塁能力A * 進塁能力B) / 出塁機会C
-        a = float(h + bb + hbp - cs - gidp)
-        b = float(tb + 0.26 * (bb + hbp) + 0.53 * (sf + sh) + 0.64 * sb - 0.03 * so)
+        custom_tb = round(1.125 * single) + round(1.69 * _2b) + round(3.02 * _3b) + round(3.73 * hr)
+        a = h + bb + hbp - cs - gidp
+        b = custom_tb + round(0.29 * (bb + hbp - ibb)) + round(0.492 * (sf + sh + sb)) - round(0.04 * so)
         c = ab + bb + hbp + sf + sh
-        return float(((a + 2.4 * c) * (b + 3 * c)/9 * c) - 0.9 * c)
+        a_b = round(a + 2.4 * c) * (b + 3 * c)
+        _9c = 9 * c
+        _09c = round(0.9 * c)
+        rc = round(a_b / _9c - _09c)
+        return rc
 
     @classmethod
     def rc27(cls, rc, ab, h, sh, sf, cs, gidp):
