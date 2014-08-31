@@ -204,7 +204,7 @@ class Stats(object):
         a_b = round(a + 2.4 * c) * (b + 3 * c)
         _9c = 9 * c
         _09c = round(0.9 * c)
-        rc = round(a_b / _9c - _09c)
+        rc = round(a_b / _9c - _09c, 1)
         return rc
 
     @classmethod
@@ -221,7 +221,7 @@ class Stats(object):
         :return: (float) run created 27
         """
         to = ab - h + sh + sf + cs + gidp
-        rc27 = round(27 * rc / to)
+        rc27 = round(27 * rc / to, 1)
         return rc27
 
     @classmethod

@@ -46,7 +46,7 @@ class TestStats(unittest.TestCase):
         # ichiro suzuki(2004)
         single = Stats.single(262, 8, 24, 5)
         rc = Stats.rc(262, 49, 4, 11, 6, 3, 2, 36, 63, 704, 19, single, 24, 5, 8)
-        self.assertEqual(rc, 137)
+        self.assertEqual(rc, 136.5)
 
     def test_rc27(self):
         """
@@ -57,7 +57,7 @@ class TestStats(unittest.TestCase):
         single = Stats.single(262, 8, 24, 5)
         rc = Stats.rc(262, 49, 4, 11, 6, 3, 2, 36, 63, 704, 19, single, 24, 5, 8)
         rc27 = Stats.rc27(rc, 704, 262, 2, 3, 11, 6)
-        self.assertEqual(rc27, 8)
+        self.assertEqual(rc27, 7.9)
 
     def test_babip(self):
         """
