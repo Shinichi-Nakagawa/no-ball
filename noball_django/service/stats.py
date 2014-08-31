@@ -4,9 +4,6 @@
 __author__ = 'Shinichi Nakagawa'
 
 
-import math
-
-
 class Stats(object):
 
     def __init__(self):
@@ -93,6 +90,19 @@ class Stats(object):
         :return: (int)single hits
         """
         return h - (hr + _2b + _3b)
+
+    @classmethod
+    def pa(cls, ab, bb, hbp, sf, sh):
+        """
+        Plate appearance
+        :param ab: at bat
+        :param bb: base on ball
+        :param hbp: hit by pitch
+        :param sf: sacrifice fly
+        :param sh: sacrifice hit
+        :return: (int)Plate appearance
+        """
+        return ab + bb + hbp + sf + sh
 
     @classmethod
     def tb(cls, single, hr, _2b, _3b):
@@ -213,3 +223,28 @@ class Stats(object):
         to = ab - h + sh + sf + cs + gidp
         rc27 = round(27 * rc / to)
         return rc27
+
+    @classmethod
+    def adam_dunn_batter(cls, hr, bb, so, pa):
+        """
+        Adam dunn %(batter)
+        :param hr: home run
+        :param bb: base on ball
+        :param so: strike out
+        :param pa: plate appearance
+        :return: (float) adam dunn
+        """
+        return round(((hr + bb + so) / pa) * 100, 1)
+
+    @classmethod
+    def adam_dunn_pitcher(cls, hr, bb, hbp, so, bfp):
+        """
+        Adam dunn %(batter)
+        :param hr: home run
+        :param bb: base on ball
+        :param hbp: hit by pitch
+        :param so: strike out
+        :param bfp: batters faced
+        :return: (float) adam dunn
+        """
+        return round(((hr + bb + hbp + so) / bfp) * 100, 1)

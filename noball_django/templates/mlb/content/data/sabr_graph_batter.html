@@ -8,15 +8,15 @@ Graphデータ（打者）
 WAR, RC27
 {% endcomment %}
 Morris.Line({
-  element: 'morris-war',
+  element: 'morris-rc',
   data: [
-      {% for row in data.war_list %}
-    	{ year: '{{ row.year }}', war: {{ row.war }}, rc: {{ row.rc }}},
+      {% for row in data.rc_list %}
+    	{ year: '{{ row.year }}', rc: {{ row.rc }}},
       {% endfor %}
   ],
   xkey: 'year',
-  ykeys: ['war', 'rc'],
-  labels: ['WAR', 'RC27'],
+  ykeys: ['rc'],
+  labels: ['RC27'],
   smooth: false,
   hideHover: 'auto',
   ymax:15,
@@ -49,12 +49,12 @@ Morris.Line({
   element: 'morris-dunn',
   data: [
       {% for row in data.dunn_list %}
-    	{ year: '{{ row.year }}', dunn: {{ row.dunn }}, st: {{ row.st }}},
+    	{ year: '{{ row.year }}', dunn: {{ row.dunn }}},
       {% endfor %}
   ],
   xkey: 'year',
-  ykeys: ['dunn', 'st'],
-  labels: ['Adam Dunn', 'EOS'],
+  ykeys: ['dunn'],
+  labels: ['Adam Dunn'],
   smooth: false,
   hideHover: 'auto',
   ymax:100,
