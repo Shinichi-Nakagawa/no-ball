@@ -92,6 +92,56 @@ class MLBService(object):
             'babip_list': [],
             'dunn_list': []
         }
+
+        for items in stats:
+            # 複数Recordあり得るので足し込む
+            year = items[0]
+            hr, bb, so, pa = 0, 0, 0, 0
+            h, ab, sf, rc = 0, 0, 0, 0
+            hbp, cs, gidp, sh, sb, ibb = 0, 0, 0, 0, 0, 0
+            single, _2b, _3b = 0, 0, 0
+            for batting in items[1]:
+                hr = hr + batting.HR
+                bb = bb + batting.BB
+                so = so + batting.SO
+                pa = pa + Stats.pa(batting.AB, batting.BB, batting.HBP, batting.SF, batting.SH)
+                h = h + batting.H
+                ab = ab + batting.AB
+                sf = sf + batting.SF
+                hbp = hbp + batting.HBP
+                cs = cs + batting.CS
+                gidp = gidp + batting.GIDP
+                sh = sh + batting.SH
+                sb = sb + batting.SB
+                ibb = ibb + batting.IBB
+                _2b = _2b + batting._2B
+                _3b = _3b + batting._3B
+
+
+
+            single = Stats.single(h, hr, _2b, _3b)
+            rc = Stats.rc(h, bb, hbp, cs, gidp, sf, sh, sb, so, ab, ibb, single, _2b, _3b, hr)
+
+            _datasets['rc_list'].append(
+                {
+                    'year': year,
+                    'rc': Stats.rc27(rc, ab, h, sh, sf, cs, gidp)
+                }
+            )
+
+            _datasets['dunn_list'].append(
+                {
+                    'year': year,
+                    'dunn': Stats.adam_dunn_batter(hr, bb, so, pa)
+                }
+            )
+            _datasets['babip_list'].append(
+                {
+                    'year': year,
+                    'avg': Stats.avg(h, ab),
+                    'babip': Stats.babip(h, hr, ab, so, sf)
+                }
+            )
         return _datasets
 
     def get_sabr_value_pitcher(self, player, stats, salary):
