@@ -47,7 +47,7 @@ class Stats(object):
         :param ip: inning pitched
         :return: (float) h9
         """
-        return round((9 * h) / ip, 3)
+        return round((9 * h) / ip, 1)
 
     @classmethod
     def so9(cls, so, ip):
@@ -57,7 +57,7 @@ class Stats(object):
         :param ip: inning pitched
         :return: (float) so9
         """
-        return round((9 * so) / ip, 3)
+        return round((9 * so) / ip, 1)
 
     @classmethod
     def bb9(cls, bb, ip):
@@ -67,7 +67,7 @@ class Stats(object):
         :param ip: inning pitched
         :return: (float) b9
         """
-        return round((9 * bb) / ip, 3)
+        return round((9 * bb) / ip, 1)
 
     @classmethod
     def hr9(cls, hr, ip):
@@ -77,7 +77,7 @@ class Stats(object):
         :param ip: inning pitched
         :return: (float) hr9
         """
-        return round((9 * hr) / ip, 3)
+        return round((9 * hr) / ip, 1)
 
     @classmethod
     def single(cls, h, hr, _2b, _3b):

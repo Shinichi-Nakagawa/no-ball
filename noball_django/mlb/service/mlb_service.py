@@ -158,6 +158,43 @@ class MLBService(object):
             'hr9_list': [],
             'dunn_list': []
         }
+
+        for items in stats:
+            # 複数Recordあり得るので足し込む
+            year = items[0]
+            bb, h, hr, so, hbp, bfp = 0, 0, 0, 0, 0, 0
+            ip_outs = 0
+            for pitching in items[1]:
+                ip_outs = ip_outs + pitching.IPouts
+                bb = bb + pitching.BB
+                h = h + pitching.H
+                hr = hr + pitching.HR
+                so = so + pitching.SO
+                hbp = hbp + pitching.HBP
+                bfp = bfp + pitching.BFP
+
+            ip = Stats.ip(ip_outs)
+
+            _datasets['whip_list'].append(
+                {
+                    'year': year,
+                    'whip': Stats.whip(bb, h, ip)
+                }
+            )
+            _datasets['hr9_list'].append(
+                {
+                    'year': year,
+                    'hr9': Stats.hr9(hr, ip),
+                    'bb9': Stats.bb9(bb, ip),
+                    'so9': Stats.so9(so, ip)
+                }
+            )
+            _datasets['dunn_list'].append(
+                {
+                    'year': year,
+                    'dunn': Stats.adam_dunn_pitcher(hr, bb, hbp, so, bfp)
+                }
+            )
         return _datasets
 
     def get_home_value_pitcher(self, player, stats, salary):
