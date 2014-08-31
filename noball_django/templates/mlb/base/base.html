@@ -66,6 +66,9 @@ BASE Template.
             <li {% block navbar-home %}{% endblock %}>
                 <a href="/{{ SUB_DOMAIN }}/player/?{{ QUERY_KEY }}={{ query_name }}"><i class="fa fa-home"></i> Player</a>
             </li>
+            <li {% block navbar-sabr %}{% endblock %}>
+                <a href="/{{ SUB_DOMAIN }}/sabr/?{{ QUERY_KEY }}={{ query_name }}"><i class="fa fa-laptop"></i> SABR</a>
+            </li>
           {% else %}
             <li>
                 <a href="/{{ SUB_DOMAIN }}/"><i class="fa fa-dashboard"></i> Top</a>

@@ -10,7 +10,7 @@ WAR
 Morris.Line({
   element: 'morris-whip',
   data: [
-      {% for row in data.war_list %}
+      {% for row in data.whip_list %}
     	{ year: '{{ row.year }}', war: {{ row.whip }}},
       {% endfor %}
   ],

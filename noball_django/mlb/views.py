@@ -153,18 +153,18 @@ class SabrView(PlayerView):
     template_name = "%s/sabr.html" % (MLBService.SUB_DOMAIN)
 
     def get_context_data(self, **kwargs):
-        context = super(HomeView, self).get_context_data(**kwargs)
+        context = super(SabrView, self).get_context_data(**kwargs)
         if 'player' in context:
-            context['values'] = self.get_response_value(context)
+            context['data'] = self.get_response_value(context)
         return context
 
     def _get_batter_content(self, player, player_stats, salary):
         # Serviceを呼び出す
-        return self.service.get_home_value_batter(player, player_stats, salary)
+        return self.service.get_sabr_value_batter(player, player_stats, salary)
 
     def _get_pitcher_content(self, player, player_stats, salary):
         # Serviceを呼び出す
-        return self.service.get_home_value_pitcher(player, player_stats, salary)
+        return self.service.get_sabr_value_pitcher(player, player_stats, salary)
 
 
 class PythagorasView(BaseView):

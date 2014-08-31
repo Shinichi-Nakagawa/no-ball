@@ -78,6 +78,38 @@ class MLBService(object):
             datasets.append(d)
         return datasets
 
+    def get_sabr_value_batter(self, player, stats, salary):
+        """
+        SABR Stats for batter
+        :param player: Player master model
+        :param stats: Player stats model
+        :param salary: Player salary model
+        :return: (dict)sabar stats data
+        """
+        # SABR Data(batter)
+        _datasets = {
+            'rc_list': [],
+            'babip_list': [],
+            'dunn_list': []
+        }
+        return _datasets
+
+    def get_sabr_value_pitcher(self, player, stats, salary):
+        """
+        SABR Stats for batter
+        :param player: Player master model
+        :param stats: Player stats model
+        :param salary: Player salary model
+        :return: (dict)sabar stats data
+        """
+        # SABR Data(pitcher)
+        _datasets = {
+            'whip_list': [],
+            'hr9_list': [],
+            'dunn_list': []
+        }
+        return _datasets
+
     def get_home_value_pitcher(self, player, stats, salary):
         """
         Pitcher profile
@@ -87,7 +119,6 @@ class MLBService(object):
         :return: pitcher profile(dict)
         """
         # statsから必要な値を修得
-        # TODO あとでいい方法を考える
         w, l, so, er, ipo, year, teams = 0, 0, 0, 0, 0, 0, []
         if len(stats) > 0:
             year = stats[0][0]
