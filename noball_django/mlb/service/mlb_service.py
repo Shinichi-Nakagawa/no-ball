@@ -104,7 +104,6 @@ class MLBService(object):
                 hr = hr + batting.HR
                 bb = bb + batting.BB
                 so = so + batting.SO
-                pa = pa + Stats.pa(batting.AB, batting.BB, batting.HBP, batting.SF, batting.SH)
                 h = h + batting.H
                 ab = ab + batting.AB
                 sf = sf + batting.SF
@@ -119,6 +118,7 @@ class MLBService(object):
 
 
 
+            pa = pa + Stats.pa(pa, bb, hbp, sf, sh)
             single = Stats.single(h, hr, _2b, _3b)
             rc = Stats.rc(h, bb, hbp, cs, gidp, sf, sh, sb, so, ab, ibb, single, _2b, _3b, hr)
 
