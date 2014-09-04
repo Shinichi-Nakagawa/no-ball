@@ -116,9 +116,7 @@ class MLBService(object):
                 _2b = _2b + batting._2B
                 _3b = _3b + batting._3B
 
-
-
-            pa = pa + Stats.pa(pa, bb, hbp, sf, sh)
+            pa = Stats.pa(ab, bb, hbp, sf, sh)
             single = Stats.single(h, hr, _2b, _3b)
             rc = Stats.rc(h, bb, hbp, cs, gidp, sf, sh, sb, so, ab, ibb, single, _2b, _3b, hr)
 
