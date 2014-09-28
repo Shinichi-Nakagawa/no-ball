@@ -148,6 +148,33 @@ class BattingPost(Base):
     GIDP = Column(Integer)
 
 
+class BattingTotal(Base):
+    __tablename__ = u'BattingTotal'
+
+    playerID = Column(String(9), primary_key=True, nullable=False)
+    yearID = Column(Integer, primary_key=True, nullable=False)
+    stint = Column(Integer, primary_key=True, nullable=False)
+    G = Column(Integer)
+    G_batting = Column(Integer)
+    AB = Column(Integer)
+    R = Column(Integer)
+    H = Column(Integer)
+    _2B = Column(u'2B', Integer)
+    _3B = Column(u'3B', Integer)
+    HR = Column(Integer)
+    RBI = Column(Integer)
+    SB = Column(Integer)
+    CS = Column(Integer)
+    BB = Column(Integer)
+    SO = Column(Integer)
+    IBB = Column(Integer)
+    HBP = Column(Integer)
+    SH = Column(Integer)
+    SF = Column(Integer)
+    GIDP = Column(Integer)
+    G_old = Column(Integer)
+
+
 class Fielding(Base):
     __tablename__ = u'Fielding'
 
@@ -354,12 +381,51 @@ class PitchingPost(Base):
     GIDP = Column(Integer)
 
 
+class PitchingTotal(Base):
+    __tablename__ = u'PitchingTotal'
+
+    playerID = Column(String(9), primary_key=True, nullable=False)
+    yearID = Column(Integer, primary_key=True, nullable=False)
+    stint = Column(Integer, primary_key=True, nullable=False)
+    W = Column(Integer)
+    L = Column(Integer)
+    G = Column(Integer)
+    GS = Column(Integer)
+    CG = Column(Integer)
+    SHO = Column(Integer)
+    SV = Column(Integer)
+    IPouts = Column(Integer)
+    H = Column(Integer)
+    ER = Column(Integer)
+    HR = Column(Integer)
+    BB = Column(Integer)
+    SO = Column(Integer)
+    IBB = Column(Integer)
+    WP = Column(Integer)
+    HBP = Column(Integer)
+    BK = Column(Integer)
+    BFP = Column(Integer)
+    GF = Column(Integer)
+    R = Column(Integer)
+    SH = Column(Integer)
+    SF = Column(Integer)
+    GIDP = Column(Integer)
+
+
 class Salary(Base):
     __tablename__ = u'Salaries'
 
     yearID = Column(Integer, primary_key=True, nullable=False)
     teamID = Column(String(3), primary_key=True, nullable=False)
     lgID = Column(String(2), primary_key=True, nullable=False)
+    playerID = Column(String(9), primary_key=True, nullable=False)
+    salary = Column(Float(asdecimal=True))
+
+
+class SalariesTotal(Base):
+    __tablename__ = u'SalariesTotal'
+
+    yearID = Column(Integer, primary_key=True, nullable=False)
     playerID = Column(String(9), primary_key=True, nullable=False)
     salary = Column(Float(asdecimal=True))
 
